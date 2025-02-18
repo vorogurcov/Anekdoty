@@ -1,11 +1,16 @@
 import {Injectable} from '@nestjs/common'
 import {DataSource} from "typeorm";
 import {Anekdot} from "./entities/anekdot";
+import {User} from "./entities/user";
 import {CreateAnekdotDto} from "../dto/CreateAnekdotDto";
+import {RegisterUserDto} from "../dto/RegisterUserDto";
+import {LoginUserDto} from "../dto/LoginUserDto";
 
 @Injectable()
 export class DbService{
     private readonly appDataSource;
+
+
 
     constructor() {
         this.appDataSource = new DataSource({
@@ -15,12 +20,11 @@ export class DbService{
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
-            entities: [Anekdot],
+            entities: [Anekdot,User],
             synchronize: true,
         });
 
     }
-
     async initialize() {
         if (!this.appDataSource.isInitialized) {
             try {
@@ -32,10 +36,11 @@ export class DbService{
             }
         }
     }
-
     async onModuleInit() {
         await this.initialize();
     }
+
+
     async saveAnekdot(createAnekdotDto: CreateAnekdotDto) {
         try {
             const anekdot = new Anekdot();
@@ -56,6 +61,34 @@ export class DbService{
         }catch(error:any){
             console.log(error.message);
             return 'Can not get Anekdoty!';
+        }
+    }
+
+    async registerUser(registerUserDto: RegisterUserDto){
+        try{
+            const newUser = new User(registerUserDto);
+            await this.appDataSource.manager.save(newUser);
+            console.log('Save new user with data', newUser);
+        }catch(error: any){
+            console.log(error.message);
+        }
+    }
+
+    async loginUser(loginUserDto: LoginUserDto){
+        try{
+            const result = await this.appDataSource.manager.find(User, {
+                where:{
+                    email:loginUserDto.email,
+                    password:loginUserDto.password,
+                }
+            })
+
+            if(result.length > 0)
+                console.log(result);
+
+            return null;
+        }catch(error: any){
+            console.log(error.message);
         }
     }
 }

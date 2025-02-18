@@ -1,24 +1,29 @@
-import {Get, Post, Controller} from '@nestjs/common'
+import {Get, Post, Controller, Render, Body} from '@nestjs/common'
+import {AuthService} from './auth.service'
 
 @Controller()
 export class AuthController{
+
+    constructor(private readonly authService:AuthService) {};
     @Get('login')
+    @Render('login')
     getLogin(){
-        //TODO: Return login page
+        return {title: 'Login'}
     }
 
     @Get('register')
+    @Render('register')
     getRegister(){
-        //TODO: Return register page
+        return {title: 'Register'}
     }
 
     @Post('login/submit')
-    submitLoginForm(){
-        //TODO: Submit log form logic
+    async submitLoginForm(@Body() body){
+        await this.authService.loginUser(body);
     }
     @Post('register/submit')
-    submitRegisterForm(){
-        //TODO: Submit reg form logic
+    async submitRegisterForm(@Body() body){
+        await this.authService.registerUser(body);
     }
 
 }
