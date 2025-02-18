@@ -55,15 +55,6 @@ export class DbService{
         }
     }
 
-    async getAnekdoty(){
-        try{
-            return await this.appDataSource.manager.find(Anekdot);
-        }catch(error:any){
-            console.log(error.message);
-            return 'Can not get Anekdoty!';
-        }
-    }
-
     async registerUser(registerUserDto: RegisterUserDto){
         try{
             const newUser = new User(registerUserDto);
