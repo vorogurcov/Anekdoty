@@ -91,4 +91,42 @@ export class DbService{
             console.log(error.message);
         }
     }
+
+    async searchAnecdots(page, sort, order){
+        try{
+            const [anecdots, total] = await this.appDataSource.manager.findAndCount(Anekdot,{
+                skip:(page - 1) * 10,
+                take:10,
+                order:{
+                    [sort]:order,
+                }
+            })
+
+            return [anecdots, total];
+        }catch(error:any){
+            console.log(error.message)
+        }
+    }
+
+    async searchUserAnecdots(id, page, sort, order){
+        try{
+            const [anecdots, total] = await this.appDataSource
+                .createQueryBuilder(Anekdot, "a")
+                .innerJoin("a.users", "user")
+                .where("user.id = :id", { id:id })
+                .select([
+                    "a.id",
+                    "a.rubricName",
+                    "a.text",
+                    "a.rating"
+                ])
+                .orderBy(`a.${sort}`, order)
+                .skip((page - 1) * 10)
+                .take(10)
+                .getManyAndCount();
+            return [anecdots, total];
+        }catch(error:any){
+            console.log(error.message)
+        }
+    }
 }

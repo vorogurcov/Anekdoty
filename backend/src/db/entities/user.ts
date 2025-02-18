@@ -26,8 +26,9 @@ export class User{
     @Column()
     password!:string;
 
-    @ManyToMany(() => Anekdot)
+    @ManyToMany(() => Anekdot,(anecdot) => anecdot.users)
     @JoinTable()
+
     anecdots!:Anekdot[];
 
 }

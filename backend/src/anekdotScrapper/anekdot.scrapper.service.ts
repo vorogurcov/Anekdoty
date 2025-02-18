@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common'
-import {Rubric} from './interfaces/rubric.interface'
+import {Rubric} from '../interfaces/rubric.interface'
 import axios from "axios";
 import * as cheerio from 'cheerio'
 import {CreateAnekdotDto} from "../dto/CreateAnekdotDto";
@@ -9,7 +9,6 @@ export class AnekdotScrapperService{
 
     constructor(private readonly dbService: DbService) {}
 
-    // // Функция для получения рубрик
     private async getRubrics() {
         const url = "https://anekdoty.ru/";
         const { data } = await axios.get(url);
@@ -101,8 +100,6 @@ export class AnekdotScrapperService{
         }
     }
 
-    async getAnekdoty(){
-        return await this.dbService.getAnekdoty();
-    }
+
 
 }

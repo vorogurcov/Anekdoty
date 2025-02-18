@@ -11,10 +11,5 @@ export class AnekdotScrapperController {
         return await this.anekdotServiceScrapper.scrap();
     }
 
-    @Get('get')
-    async getAnekdoty(){
-        return await this.anekdotServiceScrapper.getAnekdoty();
-    }
-
 }
 

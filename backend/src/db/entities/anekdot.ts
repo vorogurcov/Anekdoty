@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm'
+import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable} from 'typeorm'
+import {User} from "./user";
 
 @Entity()
 export class Anekdot {
@@ -20,4 +21,7 @@ export class Anekdot {
 
     @Column({ nullable: true })
     rating!: number ;
+
+    @ManyToMany(() => User, (user) => user.anecdots)
+    users!: User[];
 }
