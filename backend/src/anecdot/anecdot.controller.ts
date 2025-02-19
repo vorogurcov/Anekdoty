@@ -15,4 +15,8 @@ export class AnecdotController{
         return await this.anecdotService.searchUserAnecdots(query['id'],query['page'], query['sort'], query['order']);
     }
 
+    @Post('user/save')
+    async saveUserAnecdot(@Query() query){
+        return await this.anecdotService.saveUserAnecdot(query['user_id'], query['anecdot_id'])
+    }
 }

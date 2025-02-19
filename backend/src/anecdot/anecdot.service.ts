@@ -36,4 +36,11 @@ export class AnecdotService{
             console.log(error.message);
         }
     }
+
+    async saveUserAnecdot(user_id, anecdot_id){
+        const wasSaved = await this.dbService.saveUserAnecdot(user_id,anecdot_id);
+        if(wasSaved)
+            return {message: 'Anecdot successfully saved!'}
+        return {message:'Anecdot was not saved!'}
+    }
 }

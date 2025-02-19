@@ -120,4 +120,20 @@ export class DbService{
             console.log(error.message)
         }
     }
+
+    async saveUserAnecdot(user_id, anecdot_id){
+        try{
+            await this.appDataSource
+                .getRepository(User)
+                .createQueryBuilder()
+                .relation(User, 'anecdots')
+                .of(user_id)
+                .add(anecdot_id);
+
+            return true;
+        }catch(error:any){
+            console.log(error.message);
+            return false;
+        }
+    }
 }
