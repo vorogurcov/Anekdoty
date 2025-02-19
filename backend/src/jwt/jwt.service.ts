@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common'
+import {Injectable, UnauthorizedException} from '@nestjs/common'
 import {JwtService as NestJwtService} from "@nestjs/jwt";
 
 @Injectable()
@@ -14,9 +14,8 @@ export class JwtService{
             const userData = this.nestJwtService.decode(refreshToken);
             return await this.generateTokens(userData);
         }
-        return {
-            message:'401 ERROR!!'
-        }
+
+        throw new UnauthorizedException('Неверные данные для входа');
     }
 
     async generateTokens(userData){

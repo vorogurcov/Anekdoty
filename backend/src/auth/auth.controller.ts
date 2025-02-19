@@ -1,12 +1,14 @@
-import {Get, Post, Controller, Render, Body, Res} from '@nestjs/common'
+import {Get, Post, Controller, Render, Body, Res, Req} from '@nestjs/common'
 import {AuthService} from './auth.service'
 import {LoginUserDto} from "../dto/LoginUserDto";
-import { Response } from 'express';
+import { Response, Request } from 'express';
+import {JwtService} from "../jwt/jwt.service";
 
 @Controller()
 export class AuthController{
 
-    constructor(private readonly authService:AuthService) {};
+    constructor(private readonly authService:AuthService,
+                private readonly jwtService:JwtService) {};
     @Get('login')
     @Render('login')
     getLogin(){
@@ -41,8 +43,25 @@ export class AuthController{
     }
 
     @Post('refresh')
-    async refreshToken(){
+    async refreshToken(@Req() request: Request,
+                       @Res({ passthrough: true }) res: Response){
+        const refreshToken = request.cookies.refreshToken;
 
+        try{
+            const tokens = await this.jwtService.refreshTokens(refreshToken);
+
+
+            res.cookie('refreshToken', tokens.refreshToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+                sameSite: 'strict',
+            });
+
+            return { accessToken: tokens.accessToken };
+        }catch(error:any){
+            return {error: 'Unathorized!'}
+        }
     }
 
 }
