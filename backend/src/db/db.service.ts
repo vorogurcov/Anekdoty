@@ -5,6 +5,7 @@ import {User} from "./entities/user";
 import {CreateAnekdotDto} from "../dto/CreateAnekdotDto";
 import {RegisterUserDto} from "../dto/RegisterUserDto";
 import {LoginUserDto} from "../dto/LoginUserDto";
+import {UserRefreshJwt} from "./entities/jwt";
 
 @Injectable()
 export class DbService{
@@ -20,7 +21,7 @@ export class DbService{
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
-            entities: [Anekdot,User],
+            entities: [Anekdot,User,UserRefreshJwt],
             synchronize: true,
         });
 
@@ -75,7 +76,7 @@ export class DbService{
             })
 
             if(result.length > 0)
-                console.log(result);
+                return result[0]['id']
 
             return null;
         }catch(error: any){
@@ -133,6 +134,20 @@ export class DbService{
             return true;
         }catch(error:any){
             console.log(error.message);
+            return false;
+        }
+    }
+
+    async saveRefreshToken(user_id,refreshToken){
+        try{
+            await this.appDataSource.manager.save(UserRefreshJwt, {
+                user_id: user_id,
+                refreshJwt: refreshToken,
+            });
+
+            return true;
+        }catch(error:any){
+            console.log(error.message)
             return false;
         }
     }

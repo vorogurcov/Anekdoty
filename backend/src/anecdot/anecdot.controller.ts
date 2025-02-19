@@ -1,5 +1,6 @@
-import {Controller, Post, Query} from '@nestjs/common'
+import {Controller, Post, Query, Req, UseGuards} from '@nestjs/common'
 import {AnecdotService} from "./anecdot.service";
+import {Request} from 'express'
 
 @Controller()
 export class AnecdotController{
@@ -11,12 +12,49 @@ export class AnecdotController{
     }
 
     @Post('user/search')
-    async searchUserAnecdots(@Query() query){
-        return await this.anecdotService.searchUserAnecdots(query['id'],query['page'], query['sort'], query['order']);
+    async searchUserAnecdots(@Req() req: Request, @Query() query) {
+        let decoded_user_id;
+
+        try {
+            const token = req.cookies?.refreshToken;
+
+            console.log(token)
+            const payloadBase64 = token.split('.')[1]; 
+            const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64').toString());
+            console.log(decoded);
+            decoded_user_id = decoded?.user_id ?? null;
+        } catch (error:any) {
+            console.error('Failed to extract user_id:', error.message);
+            decoded_user_id = 404;
+        }
+
+        return await this.anecdotService.searchUserAnecdots(decoded_user_id,
+            query['page'],
+            query['sort'],
+            query['order']
+        );
     }
 
     @Post('user/save')
-    async saveUserAnecdot(@Query() query){
-        return await this.anecdotService.saveUserAnecdot(query['user_id'], query['anecdot_id'])
+    async saveUserAnecdot(@Req() req: Request, @Query() query) {
+        let decoded_user_id;
+
+        try {
+            const token = req.cookies?.accessToken;
+            if (!token) return null;
+
+            const payloadBase64 = token.split('.')[1];
+            const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64').toString());
+
+            decoded_user_id = decoded?.user_id ?? null;
+        } catch (error:any) {
+            console.error('Failed to extract user_id:', error.message);
+            decoded_user_id = 404;
+        }
+
+        return await this.anecdotService.saveUserAnecdot(
+            decoded_user_id,
+            query['anecdot_id']
+        );
     }
 }

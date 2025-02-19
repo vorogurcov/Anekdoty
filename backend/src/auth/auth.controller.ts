@@ -1,5 +1,7 @@
-import {Get, Post, Controller, Render, Body} from '@nestjs/common'
+import {Get, Post, Controller, Render, Body, Res} from '@nestjs/common'
 import {AuthService} from './auth.service'
+import {LoginUserDto} from "../dto/LoginUserDto";
+import { Response } from 'express';
 
 @Controller()
 export class AuthController{
@@ -18,12 +20,29 @@ export class AuthController{
     }
 
     @Post('login/submit')
-    async submitLoginForm(@Body() body){
-        await this.authService.loginUser(body);
+    async submitLoginForm(
+        @Body() loginUserDto: LoginUserDto,
+        @Res({ passthrough: true }) res: Response
+    ) {
+        const tokens = await this.authService.loginUser(loginUserDto);
+
+        res.cookie('refreshToken', tokens.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: 'strict',
+        });
+
+        return { accessToken: tokens.accessToken };
     }
     @Post('register/submit')
     async submitRegisterForm(@Body() body){
         await this.authService.registerUser(body);
+    }
+
+    @Post('refresh')
+    async refreshToken(){
+
     }
 
 }
