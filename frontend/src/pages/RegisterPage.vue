@@ -54,9 +54,11 @@ export default{
         return;
       }
 
-
-      console.log(this.name,this.email,this.password)
-
+      this.nameError = '';
+      this.emailError = '';
+      this.passwordError = '';
+      this.confirmPasswordError = '';
+      console.log("Making request...")
     }
   }
 }

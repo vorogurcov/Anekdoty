@@ -5,7 +5,7 @@
       <AppFormInput v-model="password" placeholder="Password" type="password" :error="passwordError"/>
       <AppButton type="submit">Log in</AppButton>
       <div>
-<!--        TODO: Create hrefs to register and to 'forget password?'-->
+<!--        TODO: Create hrefs to 'forget password?'-->
         <router-link to="/register">Do not have an account? Register!</router-link>
         <p> </p>
       </div>
@@ -49,9 +49,9 @@ export default {
         return;
       }
 
-
-      console.log("hiiii",this.email,this.password)
-
+      this.emailError = '';
+      this.passwordError = '';
+      console.log("Making request...")
     }
   }
 }
