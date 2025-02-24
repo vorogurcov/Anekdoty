@@ -1,8 +1,8 @@
 <template>
   <div>
-    <form @submit.prevent="submitLogin">
-      <AppFormInput v-model="email" placeholder="Email" type="email"/>
-      <AppFormInput v-model="password" placeholder="Password" type="password"/>
+    <form novalidate @submit.prevent="submitLogin">
+      <AppFormInput v-model="email" placeholder="Email" type="email" :error="emailError"/>
+      <AppFormInput v-model="password" placeholder="Password" type="password" :error="passwordError"/>
       <AppButton type="submit">Log in</AppButton>
       <div>
 <!--        TODO: Create hrefs to register and to 'forget password?'-->
@@ -17,6 +17,8 @@
 <script>
 import AppButton from "@/components/AppButton.vue";
 import AppFormInput from "@/components/AppFormInput.vue";
+import {validateLoginPage} from "@/pages/validation/scripts/validateLoginPage";
+
 export default {
   name:'LoginPage',
   components: {
@@ -26,12 +28,30 @@ export default {
   data(){
     return {
       email:'',
-      password:''
+      password:'',
+      emailError:'',
+      passwordError:''
     }
   },
   methods:{
-    submitLogin(){
-      console.log(this.email, this.password);
+    async submitLogin(){
+      const loginDto = {
+        email: this.email,
+        password: this.password,
+      };
+      const validationResult = await validateLoginPage(loginDto);
+      if(validationResult.isValid === false){
+        Object.keys(validationResult.errors).forEach((key)=>{
+          console.log(validationResult.errors[key])
+          const errorInput = key + 'Error';
+          this[errorInput] = validationResult.errors[key];
+        })
+        return;
+      }
+
+
+      console.log("hiiii",this.email,this.password)
+
     }
   }
 }

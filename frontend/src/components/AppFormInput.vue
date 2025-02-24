@@ -6,6 +6,7 @@
   :value="modelValue"
   @input="$emit('update:modelValue',$event.target.value)"
   />
+  <p>{{error}}</p>
 </template>
 
 <script>
@@ -21,6 +22,10 @@ export default {
       default:'Input'
     },
     type:{
+      type:String,
+      default:''
+    },
+    error:{
       type:String,
       default:''
     }
