@@ -5,28 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="880d2067-6e1a-4c80-8715-7e31007bca7e" name="Changes" comment="``">
-      <change beforePath="$PROJECT_DIR$/backend/src/anekdotScrapper/anekdot.scrapper.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/anekdotScrapper/anekdot.scrapper.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/anekdotScrapper/anekdot.scrapper.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/anekdotScrapper/anekdot.scrapper.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/db/db.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/db/db.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AppButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/components/AppButton.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AppFormInput.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/components/AppFormInput.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/FooterComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/components/FooterComponent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/HeaderComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/components/HeaderComponent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/BlankLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/layouts/BlankLayout.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/DefaultLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/layouts/DefaultLayout.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/IndexPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/LoginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/LoginPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/MainPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/MainPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/RegisterPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/RegisterPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/validation/schemas/anecdoteSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/validation/schemas/anecdoteSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/validation/schemas/loginUserSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/validation/schemas/loginUserSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/validation/schemas/registerUserSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/validation/schemas/registerUserSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/validation/scripts/validateLoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/validation/scripts/validateLoginPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/validation/scripts/validateRegisterPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/validation/scripts/validateRegisterPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/interface/components/DropDownMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/components/DropDownMenu.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/interface/pages/MainPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/MainPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +90,7 @@
       <workItem from="1740297541923" duration="11275000" />
       <workItem from="1740377345314" duration="16611000" />
       <workItem from="1740464285834" duration="2180000" />
-      <workItem from="1740486177280" duration="4557000" />
+      <workItem from="1740486177280" duration="9569000" />
     </task>
     <servers />
   </component>

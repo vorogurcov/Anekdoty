@@ -7,14 +7,16 @@
         v-if="isOpen"
         class="absolute mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
     >
-      <AppButton
-          v-for="(element, index) in menuElements"
-          :key="index"
-          @click="selectElement(element)"
-          class="block w-full text-left px-4 py-2 hover:bg-gray-100 transition"
-      >
-        {{ element }}
-      </AppButton>
+      <div class="max-h-48 overflow-y-auto">
+        <AppButton
+            v-for="(element, index) in menuElements"
+            :key="index"
+            @click="selectElement(element)"
+            class="block w-full text-left px-4 py-2 hover:bg-gray-700 transition"
+        >
+          {{ element }}
+        </AppButton>
+      </div>
     </div>
   </div>
 </template>
@@ -36,7 +38,7 @@ export default {
     },
     selectElement(element) {
       this.$emit("select", element);
-      this.isOpen = false; // Закрываем меню после выбора
+      this.isOpen = false;
     },
   },
   props: {
@@ -51,3 +53,4 @@ export default {
   },
 };
 </script>
+
