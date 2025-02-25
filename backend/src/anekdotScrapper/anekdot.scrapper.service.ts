@@ -9,7 +9,7 @@ export class AnekdotScrapperService{
 
     constructor(private readonly dbService: DbService) {}
 
-    private async getRubrics() {
+    async getRubrics() {
         const url = "https://anekdoty.ru/";
         const { data } = await axios.get(url);
         const $ = cheerio.load(data);

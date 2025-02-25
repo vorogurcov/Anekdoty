@@ -11,5 +11,9 @@ export class AnekdotScrapperController {
         return await this.anekdotServiceScrapper.scrap();
     }
 
+    @Get('rubrics')
+    async getRubrics(){
+        return await this.anekdotServiceScrapper.getRubrics();
+    }
 }
 

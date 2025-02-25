@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import DefaultLayout from './layouts/DefaultLayout.vue';
-import BlankLayout from './layouts/BlankLayout.vue';
+import DefaultLayout from './interface/layouts/DefaultLayout.vue';
+import BlankLayout from './interface/layouts/BlankLayout.vue';
 import { useRoute } from 'vue-router';
 
 export default {

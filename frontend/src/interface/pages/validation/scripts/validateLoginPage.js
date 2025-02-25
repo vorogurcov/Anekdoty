@@ -1,19 +1,17 @@
-import registerUserSchema from "@/pages/validation/schemas/registerUserSchema";
-
-export const validateRegisterPage = async (registerDto) => {
+import loginUserSchema from "@/interface/pages/validation/schemas/loginUserSchema";
+export const validateLoginPage = async (loginDto) => {
     const errors = {};
     try {
-        Object.keys(registerDto).forEach((key)=>{
+        Object.keys(loginDto).forEach((key)=>{
             errors[key] = '';
         })
-        await registerUserSchema.validate(registerDto, { abortEarly: false });
+        await loginUserSchema.validate(loginDto, { abortEarly: false });
         return { isValid: true, errors };
     } catch (err) {
         err.inner.forEach((error) => {
             if(!errors[error.path])
                 errors[error.path]=error.message;
         });
-
         return { isValid: false, errors };
     }
 };

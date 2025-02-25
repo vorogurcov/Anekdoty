@@ -87,8 +87,8 @@ export class DbService{
     async searchAnecdots(page, sort, order){
         try{
             const [anecdots, total] = await this.appDataSource.manager.findAndCount(Anekdot,{
-                skip:(page - 1) * 10,
-                take:10,
+                skip:(page - 1) * 5,
+                take:5,
                 order:{
                     [sort]:order,
                 }
@@ -113,8 +113,8 @@ export class DbService{
                     "a.rating"
                 ])
                 .orderBy(`a.${sort}`, order)
-                .skip((page - 1) * 10)
-                .take(10)
+                .skip((page - 1) * 5)
+                .take(5)
                 .getManyAndCount();
             return [anecdots, total];
         }catch(error:any){
