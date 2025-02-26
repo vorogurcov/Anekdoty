@@ -68,7 +68,6 @@ export class DbService{
 
     async loginUser(loginUserDto: LoginUserDto){
         try{
-            console.log(loginUserDto)
             const result = await this.appDataSource.manager.find(User, {
                 where:{
                     email:loginUserDto.email,
@@ -77,7 +76,6 @@ export class DbService{
             })
 
             if(result.length > 0){
-                console.log(result)
                 return result[0]['id']
             }
 
