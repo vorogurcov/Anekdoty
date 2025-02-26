@@ -6,14 +6,13 @@ export const searchUserAnecdotes = async ({ page, sort, order }) => {
             throw new Error('No access token available');
         }
 
-        // Формируем URL с query-параметрами
         const url = new URL('http://localhost:3000/user/search');
         url.searchParams.append('page', page);
         url.searchParams.append('sort', sort);
         url.searchParams.append('order', order);
 
         const formData = new URLSearchParams();
-        formData.append('accessToken', token); // Только токен в теле запроса
+        formData.append('accessToken', token);
 
         console.log(`Requesting: ${url.toString()}`);
 
@@ -22,8 +21,8 @@ export const searchUserAnecdotes = async ({ page, sort, order }) => {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: formData.toString(), // В body только accessToken
-            credentials: 'include', // Если сервер использует refreshToken в куках
+            body: formData.toString(),
+            credentials: 'include',
         });
 
         if (!response.ok) {

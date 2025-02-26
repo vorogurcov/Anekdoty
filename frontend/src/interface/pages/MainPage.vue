@@ -1,30 +1,38 @@
 <template>
-  <div>
-    <DropDownMenu
-        :menuTitle="selectedSort ? selectedSort : 'Select a sort criteria'"
-        :menuElements="sortCriterias"
-        @select="handleSortSelect"
-    />
-    <DropDownMenu
-        :menuTitle="selectedOrder ? selectedOrder: 'Select sort order'"
-        :menuElements="sortOrders"
-        @select="handleSortOrderSelect"
-    />
-    <DropDownMenu
-        menuTitle="Add new anecdote"
-        :menuElements="anecdotes"
-        @select="handleAddNewAnecdote"
-        class="w-72"
-    />
-    <AnecdoteContainer
-        v-for="anecdote in anecdotes"
-        :key="anecdote.id"
-        :anecdoteText="anecdote.text"
-        :rating="anecdote.rating"
-        :rubricName="anecdote.rubricName"
-    />
+  <div class="flex flex-col min-h-screen justify-between">
+    <div>
+      <DropDownMenu
+          :menuTitle="selectedSort ? selectedSort : 'Select a sort criteria'"
+          :menuElements="sortCriterias"
+          @select="handleSortSelect"
+      />
+      <DropDownMenu
+          :menuTitle="selectedOrder ? selectedOrder: 'Select sort order'"
+          :menuElements="sortOrders"
+          @select="handleSortOrderSelect"
+      />
+      <NewAnecdoteDropDownMenu
+          menuTitle="Add new anecdote"
+          @select="handleAddNewAnecdote"
+          :fetchElements="fetchAllAnecdotes"
+      />
 
-    <div class="flex items-center justify-between mt-6">
+      <div class="min-h-[300px] flex flex-col justify-center">
+        <AnecdoteContainer
+            v-for="anecdote in anecdotes"
+            :key="anecdote.id"
+            :anecdoteText="anecdote.text"
+            :rating="anecdote.rating"
+            :rubricName="anecdote.rubricName"
+            :id="anecdote.id"
+        />
+        <p v-if="anecdotes.length === 0" class="text-center text-gray-500 text-lg mt-6">
+          No anecdotes found.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mt-6 p-4 border-t">
       <p class="text-xl text-gray-800 font-medium">Page: {{ pageNumber }}</p>
       <div>
         <AppButton
@@ -37,7 +45,7 @@
         <AppButton
             @click="handleButtonClick(1)"
             :disabled="pageNumber >= ((this.total - this.total % 5) / 5 + 1)"
-            :class="{'bg-gray-400 text-gray-600 cursor-not-allowed': pageNumber >= ((this.total - this.total % 5) / 5 + 1)}">
+            :class="{'bg-gray-400 text-gray-600 cursor-not-allowed': pageNumber >= Math.ceil(this.total / 5)}">
           Next page
         </AppButton>
       </div>
@@ -50,9 +58,10 @@
 <script>
 import AnecdoteContainer from "@/interface/components/AnecdoteContainer.vue";
 //import { getRubrics } from "@/services/anecdoteService";
-import {  searchUserAnecdotes } from "@/services/anecdoteService";
+import { searchUserAnecdotes } from "@/services/anecdoteService";
 import AppButton from "@/interface/components/AppButton.vue";
 import DropDownMenu from "@/interface/components/DropDownMenu.vue";
+import NewAnecdoteDropDownMenu from "@/interface/components/NewAnecdoteDropDownMenu.vue";
 
 export default {
   name: "MainPage",
@@ -60,6 +69,7 @@ export default {
     DropDownMenu,
     AppButton,
     AnecdoteContainer,
+    NewAnecdoteDropDownMenu,
   },
   data() {
     return {
@@ -109,6 +119,37 @@ export default {
     //   console.log(this.selectedRubric)
     //   //await this.handleAnecdotes();
     // },
+    async fetchAllAnecdotes(page = 1) {
+      try {
+        // Убеждаемся, что page — число
+        const pageNumber = Number(page);
+        if (isNaN(pageNumber) || pageNumber < 1) {
+          throw new Error("Invalid 'page' value. Must be a positive number.");
+        }
+
+        const url = `http://localhost:3000/search?page=${pageNumber}&sort=text&order=DESC`;
+        console.log(url);
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        return { anecdotes: data.data.anecdots, total: data.data.total };
+
+      } catch (error) {
+        console.error("Error fetching anecdotes:", error);
+        return [];
+      }
+    }
+    ,
     async handleSortSelect(sort) {
       this.selectedSort = sort;
       console.log(this.selectedSort)

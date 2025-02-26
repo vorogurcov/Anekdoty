@@ -39,9 +39,9 @@ export const submitRegister = async (formData) => {
             throw new Error('Registration failed');
         }
 
-        return await response;
+        return true;
     } catch (error) {
         console.error('Registration error:', error);
-        throw error;
+        return false;
     }
 };

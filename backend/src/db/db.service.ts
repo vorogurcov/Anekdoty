@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common'
-import {DataSource} from "typeorm";
+import {DataSource, Like} from "typeorm";
 import {Anekdot} from "./entities/anekdot";
 import {User} from "./entities/user";
 import {CreateAnekdotDto} from "../dto/CreateAnekdotDto";
@@ -68,6 +68,7 @@ export class DbService{
 
     async loginUser(loginUserDto: LoginUserDto){
         try{
+            console.log(loginUserDto)
             const result = await this.appDataSource.manager.find(User, {
                 where:{
                     email:loginUserDto.email,
@@ -75,8 +76,11 @@ export class DbService{
                 }
             })
 
-            if(result.length > 0)
+            if(result.length > 0){
+                console.log(result)
                 return result[0]['id']
+            }
+
 
             return null;
         }catch(error: any){
@@ -97,6 +101,19 @@ export class DbService{
             return [anecdots, total];
         }catch(error:any){
             console.log(error.message)
+        }
+    }
+
+    async searchAnecdoteByText(anecdoteText){
+        try{
+            return await this.appDataSource.manager.findOne(Anekdot,{
+                where:{
+                    text:Like(`%${anecdoteText}%`)
+                }
+            })
+        }catch(error:any){
+            console.log(error.message)
+            return null;
         }
     }
 

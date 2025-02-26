@@ -43,4 +43,19 @@ export class AnecdotService{
             return {message: 'Anecdot successfully saved!'}
         return {message:'Anecdot was not saved!'}
     }
+
+    async searchAnecdoteByText(anecdoteText){
+        const anecdote = await this.dbService.searchAnecdoteByText(anecdoteText);
+        if(anecdote === null)
+            return {data: {
+                anecdots:'',
+                    total:0}
+                }
+        return  {data:{
+                anecdots:anecdote,
+                total:1,
+                }
+            }
+
+    }
 }

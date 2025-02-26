@@ -69,14 +69,16 @@ export default {
 
       this.emailError = '';
       this.passwordError = '';
-      await this.handleLogin();
+      await this.handleLogin(loginDto);
     },
-    async handleLogin() {
+    async handleLogin(loginDto) {
       try {
-        this.accessToken = await submitLogin(this.form).then((data) => data.accessToken);
+        this.accessToken = await submitLogin(loginDto).then((data) => data.accessToken);
         localStorage.setItem('accessToken', this.accessToken);
+        this.$router.push('/main')
       } catch (error) {
         console.error('Login failed:', error);
+        this.$router.push('/404')
       }
     }
   }

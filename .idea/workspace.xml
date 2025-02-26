@@ -6,8 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="880d2067-6e1a-4c80-8715-7e31007bca7e" name="Changes" comment="``">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/interface/components/DropDownMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/components/DropDownMenu.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/anecdot/anecdot.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/anecdot/anecdot.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/anecdot/anecdot.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/anecdot/anecdot.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/db/db.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/db/db.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/interface/pages/LoginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/LoginPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/interface/pages/MainPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/MainPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/interface/pages/RegisterPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/interface/pages/RegisterPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/services/authService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/authService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +95,9 @@
       <workItem from="1740297541923" duration="11275000" />
       <workItem from="1740377345314" duration="16611000" />
       <workItem from="1740464285834" duration="2180000" />
-      <workItem from="1740486177280" duration="9569000" />
+      <workItem from="1740486177280" duration="9643000" />
+      <workItem from="1740548125403" duration="5000000" />
+      <workItem from="1740561463361" duration="5090000" />
     </task>
     <servers />
   </component>

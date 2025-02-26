@@ -91,7 +91,13 @@ export default {
       this.confirmPasswordError = '';
       console.log("Making request...");
       delete registerDto.confirmPassword;
-      await submitRegister(registerDto);
+      const result = await submitRegister(registerDto);
+      if(result === true){
+        this.$router.push('/login');
+        return;
+      }
+
+      this.$router.push('/404')
     }
   }
 }

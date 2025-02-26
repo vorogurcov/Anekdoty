@@ -1,4 +1,4 @@
-import {Body, Controller, Post, Query, Req, UseGuards} from '@nestjs/common'
+import {Body, Controller, Post, Query, Req} from '@nestjs/common'
 import {AnecdotService} from "./anecdot.service";
 import {Request} from 'express'
 
@@ -54,5 +54,9 @@ export class AnecdotController{
             decoded_user_id,
             query['anecdot_id']
         );
+    }
+    @Post('searchAnecdote')
+    async searchAnecdoteByText(@Query() query){
+        return await this.anecdotService.searchAnecdoteByText(query['anecdote_text'])
     }
 }
