@@ -39,3 +39,24 @@ npm start
 Заполняет бд
 ### 7. Тестовые запросы на Postman
 https://www.postman.com/spaceflight-geologist-43185237/anekdotwebsite/overview
+
+## Далее идут фронтенд зависимости
+
+### 8. Установка зависимостей
+Требуется установить Vue CLI
+```
+npm install -g @vue/cli
+```
+### 9. Зависимости проекта
+Находясь в папке проекта
+```
+ cd frontend
+ npm install
+```
+### 10. Запуск проекта
+Находясь в папке фронтенд
+```cmd
+ npm run serve
+```
+
+
