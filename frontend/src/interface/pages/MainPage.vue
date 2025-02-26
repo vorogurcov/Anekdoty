@@ -14,7 +14,6 @@
       <NewAnecdoteDropDownMenu
           menuTitle="Add new anecdote"
           @select="handleAddNewAnecdote"
-          :fetchElements="fetchAllAnecdotes"
       />
 
       <div class="min-h-[300px] flex flex-col justify-center">
@@ -58,7 +57,7 @@
 <script>
 import AnecdoteContainer from "@/interface/components/AnecdoteContainer.vue";
 //import { getRubrics } from "@/services/anecdoteService";
-import { searchUserAnecdotes } from "@/services/anecdoteService";
+import { searchUserAnecdotes, addNewAnecdote } from "@/services/anecdoteService";
 import AppButton from "@/interface/components/AppButton.vue";
 import DropDownMenu from "@/interface/components/DropDownMenu.vue";
 import NewAnecdoteDropDownMenu from "@/interface/components/NewAnecdoteDropDownMenu.vue";
@@ -119,37 +118,7 @@ export default {
     //   console.log(this.selectedRubric)
     //   //await this.handleAnecdotes();
     // },
-    async fetchAllAnecdotes(page = 1) {
-      try {
-        // Убеждаемся, что page — число
-        const pageNumber = Number(page);
-        if (isNaN(pageNumber) || pageNumber < 1) {
-          throw new Error("Invalid 'page' value. Must be a positive number.");
-        }
 
-        const url = `http://localhost:3000/search?page=${pageNumber}&sort=text&order=DESC`;
-        console.log(url);
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({}),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const data = await response.json();
-        return { anecdotes: data.data.anecdots, total: data.data.total };
-
-      } catch (error) {
-        console.error("Error fetching anecdotes:", error);
-        return [];
-      }
-    }
-    ,
     async handleSortSelect(sort) {
       this.selectedSort = sort;
       console.log(this.selectedSort)
@@ -160,43 +129,10 @@ export default {
       console.log(this.selectedOrder)
       await this.handleAnecdotes();
     },
-    async addNewAnecdote(anecdote) {
-      try {
-        const anecdoteId = anecdote.id;
-        const accessToken = localStorage.getItem('accessToken');
 
-        if (!accessToken) {
-          throw new Error('Access token is missing');
-        }
-
-        const url = `http://localhost:3000/user/save/?anecdot_id=${anecdoteId}`;
-
-        const formData = new URLSearchParams();
-        formData.append('accessToken', accessToken);
-
-        console.log(url)
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: formData.toString(),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Request failed with status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log(result);
-
-      } catch (error) {
-        console.log(error.message);
-      }
-    },
     async handleAddNewAnecdote(anecdote) {
       this.newAnecdote = anecdote;
-      await this.addNewAnecdote(this.newAnecdote)
+      await addNewAnecdote(this.newAnecdote)
       await this.handleAnecdotes();
     }
   },

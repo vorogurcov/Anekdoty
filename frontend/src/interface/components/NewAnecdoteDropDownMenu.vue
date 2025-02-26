@@ -35,6 +35,8 @@
 <script>
 import AppButton from "@/interface/components/AppButton.vue";
 import AppFormInput from "@/interface/components/AppFormInput.vue";
+import {anecdoteSearch} from "@/services/anecdoteService";
+import {fetchAllAnecdotes} from "@/services/anecdoteService";
 
 export default {
   name: "NewAnecdoteDropDownMenu",
@@ -78,7 +80,7 @@ export default {
       this.isLoading = true;
 
       try {
-        const { anecdotes, total } = await this.fetchElements(this.page);
+        const { anecdotes, total } = await fetchAllAnecdotes(this.page);
         if (anecdotes.length > 0) {
           this.menuElementsLocal.push(...anecdotes);
           this.page++;
@@ -101,13 +103,9 @@ export default {
     },
     async handleAnecdoteSearch(){
       try{
-        const url = `http://localhost:3000/searchAnecdote?anecdote_text=${this.anecdoteText}`
-        const data = await fetch(url,{
-          method:'POST',
-        }).then(response => response.json())
+        const data = await anecdoteSearch(this.anecdoteText)
         const total = data.data.total
 
-        console.log(data)
         if(total === 0){
           this.anecdoteNotFound = true;
           this.anecdote = null;
@@ -133,11 +131,7 @@ export default {
     menuTitle: {
       type: String,
       default: "Menu",
-    },
-    fetchElements: {
-      type: Function,
-      required: true,
-    },
+    }
   },
 };
 </script>

@@ -47,7 +47,8 @@
 <script>
 import AppButton from "@/interface/components/AppButton.vue";
 import AppFormInput from "@/interface/components/AppFormInput.vue";
-import { validateRegisterPage } from "@/interface/pages/validation/scripts/validateRegisterPage";
+import {validatePageByScheme} from "@/interface/pages/validation/scripts/validatePageByScheme";
+import registerUserSchema from "@/interface/pages/validation/schemas/registerUserSchema";
 import { submitRegister } from "@/services/authService";
 
 export default {
@@ -76,7 +77,7 @@ export default {
         password: this.password,
         confirmPassword: this.confirmPassword,
       };
-      const validationResult = await validateRegisterPage(registerDto);
+      const validationResult = await validatePageByScheme(registerDto,registerUserSchema);
       if (validationResult.isValid === false) {
         Object.keys(validationResult.errors).forEach((key) => {
           const errorInput = key + 'Error';
@@ -96,8 +97,7 @@ export default {
         this.$router.push('/login');
         return;
       }
-
-      this.$router.push('/404')
+      this.$router.push('/error')
     }
   }
 }

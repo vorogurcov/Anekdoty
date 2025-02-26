@@ -3,6 +3,7 @@ import IndexPage from '@/interface/pages/IndexPage.vue';
 import MainPage from '@/interface/pages/MainPage.vue';
 import LoginPage from '@/interface/pages/LoginPage.vue';
 import RegisterPage from '@/interface/pages/RegisterPage.vue';
+import ErrorPage from "@/interface/pages/ErrorPage.vue";
 
 const routes = [
     {
@@ -24,6 +25,11 @@ const routes = [
         path: '/register',
         component: RegisterPage,
         meta: { layout: 'BlankLayout' }
+    },
+    {
+        path: '/error',
+        component: ErrorPage,
+        meta: { layout: 'DefaultLayout' }
     }
 ];
 

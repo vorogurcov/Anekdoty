@@ -34,7 +34,8 @@
 <script>
 import AppButton from "@/interface/components/AppButton.vue";
 import AppFormInput from "@/interface/components/AppFormInput.vue";
-import { validateLoginPage } from "@/interface/pages/validation/scripts/validateLoginPage";
+import {validatePageByScheme} from "@/interface/pages/validation/scripts/validatePageByScheme";
+import loginUserSchema from "@/interface/pages/validation/schemas/loginUserSchema";
 import { submitLogin } from "@/services/authService";
 
 export default {
@@ -58,7 +59,7 @@ export default {
         email: this.email,
         password: this.password,
       };
-      const validationResult = await validateLoginPage(loginDto);
+      const validationResult = await validatePageByScheme(loginDto, loginUserSchema);
       if (validationResult.isValid === false) {
         Object.keys(validationResult.errors).forEach((key) => {
           const errorInput = key + 'Error';
@@ -78,7 +79,7 @@ export default {
         this.$router.push('/main')
       } catch (error) {
         console.error('Login failed:', error);
-        this.$router.push('/404')
+        this.$router.push('/error')
       }
     }
   }
