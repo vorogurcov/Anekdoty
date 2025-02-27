@@ -16,8 +16,12 @@ export class AuthService{
     async loginUser(loginUserDto: LoginUserDto) {
         const user_id = await this.dbService.loginUser(loginUserDto);
         if (user_id !== null) {
-            const tokens = await this.jwtService.generateTokens({ user_id });
-            await this.dbService.saveRefreshToken(user_id, tokens.refreshToken);
+            const userData = {
+                user_id,
+                refreshedAt:Date.now(),
+            }
+            const tokens = await this.jwtService.generateTokens(userData);
+            await this.dbService.saveRefreshToken(userData, tokens.refreshToken);
             return tokens;
         }
         throw new UnauthorizedException('Неверные данные для входа');

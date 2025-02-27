@@ -1,9 +1,12 @@
+import router from "@/router";
+import {refreshToken} from "@/services/authService";
 export const searchUserAnecdotes = async ({ page, sort, order }) => {
     try {
         const token = localStorage.getItem('accessToken');
 
         if (!token) {
-            throw new Error('No access token available');
+            await router.push('/error');
+            return;
         }
 
         const url = new URL('http://localhost:3000/user/search');
@@ -25,8 +28,24 @@ export const searchUserAnecdotes = async ({ page, sort, order }) => {
             credentials: 'include',
         });
 
-        if (!response.ok) {
-            throw new Error('Anecdote search failed');
+        if (response.status === 401) {
+            console.error("Token expired");
+            try {
+                const newAccessToken = await refreshToken();
+                localStorage.setItem('accessToken', newAccessToken);
+
+                return await searchUserAnecdotes({ page, sort, order });
+            } catch (error) {
+                console.error("Error refreshing token:", error);
+                await router.push('/error');
+                return;
+            }
+        }
+
+        if (response.status === 404) {
+            console.error("Invalid token");
+            await router.push('/error');
+            return;
         }
 
         return await response.json();
@@ -76,7 +95,8 @@ export const addNewAnecdote = async function (anecdote) {
         const accessToken = localStorage.getItem('accessToken');
 
         if (!accessToken) {
-            throw new Error('Access token is missing');
+            await router.push('/error');
+            return;
         }
 
         const url = `http://localhost:3000/user/save/?anecdot_id=${anecdoteId}`;
@@ -84,7 +104,7 @@ export const addNewAnecdote = async function (anecdote) {
         const formData = new URLSearchParams();
         formData.append('accessToken', accessToken);
 
-        console.log(url)
+        console.log(url);
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -92,6 +112,25 @@ export const addNewAnecdote = async function (anecdote) {
             },
             body: formData.toString(),
         });
+
+        if (response.status === 401) {
+            console.error("Token expired");
+            try {
+                const newAccessToken = await refreshToken();
+                localStorage.setItem('accessToken', newAccessToken);
+                return await addNewAnecdote(anecdote);
+            } catch (error) {
+                console.error("Error refreshing token:", error);
+                await router.push('/error');
+                return;
+            }
+        }
+
+        if (response.status === 404) {
+            console.error("Invalid token");
+            await router.push('/error');
+            return;
+        }
 
         if (!response.ok) {
             throw new Error(`Request failed with status: ${response.status}`);
@@ -103,7 +142,7 @@ export const addNewAnecdote = async function (anecdote) {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
 export const fetchAllAnecdotes = async function(pageNumber) {
     try {

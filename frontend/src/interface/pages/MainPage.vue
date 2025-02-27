@@ -93,9 +93,10 @@ export default {
           order: this.selectedOrder || "DESC",
           // rubric: this.selectedRubric ? this.selectedRubric.id : null,
         });
-
+        console.log(response)
         this.anecdotes = response.data.anecdots;
         this.total = response.data.total;
+        console.log(this.anecdotes,this.total)
       } catch (error) {
         console.error("Failed to fetch anecdotes:", error);
       }

@@ -32,6 +32,7 @@ export class AnecdotService{
                     }
                 }
             }
+
         }catch(error:any){
             console.log(error.message);
         }

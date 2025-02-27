@@ -1,4 +1,4 @@
-import {Get, Post, Controller, Render, Body, Res, Req} from '@nestjs/common'
+import {Get, Post, Controller, Render, Body, Res, Req, UnauthorizedException} from '@nestjs/common'
 import {AuthService} from './auth.service'
 import {LoginUserDto} from "../dto/LoginUserDto";
 import { Response, Request } from 'express';
@@ -48,8 +48,8 @@ export class AuthController{
         const refreshToken = request.cookies.refreshToken;
 
         try{
+            await this.jwtService.verifyRefreshToken(refreshToken)
             const tokens = await this.jwtService.refreshTokens(refreshToken);
-
 
             res.cookie('refreshToken', tokens.refreshToken, {
                 httpOnly: true,
@@ -60,7 +60,8 @@ export class AuthController{
 
             return { accessToken: tokens.accessToken };
         }catch(error:any){
-            return {error: 'Unathorized!'}
+            console.log('Error during token refresh', error.message)
+            throw new UnauthorizedException('Unauthorized!');
         }
     }
 

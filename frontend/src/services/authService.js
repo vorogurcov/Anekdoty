@@ -1,3 +1,4 @@
+import router from "@/router";
 
 const encodeFormData = (formData) => {
     return new URLSearchParams(formData).toString();
@@ -45,3 +46,28 @@ export const submitRegister = async (formData) => {
         return false;
     }
 };
+
+export const refreshToken = async function(refreshToken){
+    try {
+        console.log('Making request to http://localhost:3000/refresh')
+        const response = await fetch('http://localhost:3000/refresh', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: encodeFormData(refreshToken),
+            credentials:'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Refresh token failed');
+        }
+
+        const data = await response.json();
+        return data.accessToken
+    } catch (error) {
+
+        await router.push('/login');
+        return;
+    }
+}
