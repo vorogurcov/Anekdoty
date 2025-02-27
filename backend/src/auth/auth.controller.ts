@@ -1,4 +1,4 @@
-import {Get, Post, Controller, Render, Body, Res, Req, UnauthorizedException} from '@nestjs/common'
+import {Get, Post, Controller, Render, Body, Res, Req, UnauthorizedException, NotFoundException} from '@nestjs/common'
 import {AuthService} from './auth.service'
 import {LoginUserDto} from "../dto/LoginUserDto";
 import { Response, Request } from 'express';
@@ -46,7 +46,8 @@ export class AuthController{
     async refreshToken(@Req() request: Request,
                        @Res({ passthrough: true }) res: Response){
         const refreshToken = request.cookies.refreshToken;
-
+        if(refreshToken === undefined)
+            throw new NotFoundException('No refresh token!');
         try{
             await this.jwtService.verifyRefreshToken(refreshToken)
             const tokens = await this.jwtService.refreshTokens(refreshToken);

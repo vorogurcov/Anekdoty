@@ -44,7 +44,7 @@ export const searchUserAnecdotes = async ({ page, sort, order }) => {
 
         if (response.status === 404) {
             console.error("Invalid token");
-            await router.push('/error');
+            await router.push('/login');
             return;
         }
 
@@ -128,7 +128,7 @@ export const addNewAnecdote = async function (anecdote) {
 
         if (response.status === 404) {
             console.error("Invalid token");
-            await router.push('/error');
+            await router.push('/login');
             return;
         }
 
