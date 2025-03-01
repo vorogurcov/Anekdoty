@@ -27,11 +27,7 @@ export class AnecdotController{
     async searchUserAnecdots(@Query() query, @Body() body) {
         try {
             const token = body.accessToken;
-            console.log(token)
-            await this.jwtService.verifyAccessToken(token)
-            console.log('WAS VERIFIED!')
             const userData = await this.jwtService.decodeToken(token);
-            console.log(userData);
             const decoded_user_id = userData?.user_id ?? null;
 
             return await this.anecdotService.searchUserAnecdots(
@@ -41,17 +37,8 @@ export class AnecdotController{
                 query['order']
             );
         } catch (error: any) {
-            console.log("Error during user's anecdote search");
-
-            if (error instanceof TokenExpiredError) {
-                throw new UnauthorizedException("Token expired");
-            }
-
-            if (error instanceof JsonWebTokenError) {
-                throw new NotFoundException("Invalid token");
-            }
-
-            throw new InternalServerErrorException("An error occurred");
+            console.log("Failed to search user anecdotes:",error.message);
+            throw error;
         }
     }
 
@@ -60,7 +47,6 @@ export class AnecdotController{
     async saveUserAnecdot(@Req() req: Request, @Query() query, @Body() body) {
         try {
             const token = body.accessToken;
-            await this.jwtService.verifyAccessToken(token);
             const userData = await this.jwtService.decodeToken(token);
             const decoded_user_id = userData?.user_id ?? null;
 
@@ -69,17 +55,8 @@ export class AnecdotController{
                 query['anecdot_id']
             );
         } catch (error: any) {
-            console.error('Failed to extract user_id:', error.message);
-
-            if (error instanceof TokenExpiredError) {
-                throw new UnauthorizedException("Token expired");
-            }
-
-            if (error instanceof JsonWebTokenError) {
-                throw new NotFoundException("Invalid token");
-            }
-
-            throw new InternalServerErrorException("An error occurred while saving the anecdote");
+            console.error('Failed to save user anecdote:', error.message);
+            throw error;
         }
     }
     @Post('searchAnecdote')
