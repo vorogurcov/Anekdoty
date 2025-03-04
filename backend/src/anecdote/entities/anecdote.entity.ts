@@ -1,14 +1,8 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable} from 'typeorm'
-import {User} from "./user";
+import {User} from "../../auth/entities/user.entity";
 
 @Entity()
-export class Anekdot {
-
-    constructor(data?: Partial<Anekdot>) {
-        if (data) {
-            Object.assign(this, data);
-        }
-    }
+export class Anecdote {
 
     @PrimaryGeneratedColumn()
     id!: number;
@@ -22,6 +16,7 @@ export class Anekdot {
     @Column({ nullable: true })
     rating!: number ;
 
-    @ManyToMany(() => User, (user) => user.anecdots)
+    @ManyToMany(() => User, (user) => user.anecdotes)
+    @JoinTable()
     users!: User[];
 }

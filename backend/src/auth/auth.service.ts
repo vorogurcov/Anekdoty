@@ -1,30 +1,68 @@
 import {Injectable, UnauthorizedException} from "@nestjs/common";
-import {DbService} from "../db/db.service";
-import {RegisterUserDto} from "../dto/RegisterUserDto";
-import {LoginUserDto} from "../dto/LoginUserDto";
-import {JwtService} from "../jwt/jwt.service";
+import {RegisterUserDto} from "./dto/register-user.dto";
+import {LoginUserDto} from "./dto/login-user.dto";
+import {UserRepository} from "./repositories/user.repository";
+import * as bcrypt from 'bcrypt'
+import {JwtService} from "@nestjs/jwt";
+import {JwtPayloadDto} from "./dto/jwt-payload.dto";
+import {User} from "./entities/user.entity";
 
 @Injectable()
 export class AuthService{
-    constructor(private readonly dbService:DbService,
-                private readonly jwtService:JwtService){}
-
+    constructor(private userRepository:UserRepository,
+                private jwtService:JwtService
+    ) {}
     async registerUser(registerUserDto:RegisterUserDto){
-        await this.dbService.registerUser(registerUserDto);
-    }
+        try{
+            const {password, ...otherUserData} = registerUserDto;
 
-    async loginUser(loginUserDto: LoginUserDto) {
-        const user_id = await this.dbService.loginUser(loginUserDto);
-        if (user_id !== null) {
-            const userData = {
-                user_id,
-                refreshedAt:Date.now(),
-            }
-            const tokens = await this.jwtService.generateTokens(userData);
-            await this.dbService.saveRefreshToken(userData, tokens.refreshToken);
-            return tokens;
+            const salt = await bcrypt.genSalt()
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            const userCredentials = {...otherUserData, password:hashedPassword};
+
+            await this.userRepository.saveUser(userCredentials);
+        }catch(error:any){
+            throw error;
         }
-        throw new UnauthorizedException('Неверные данные для входа');
     }
 
+    async loginUser(loginUserDto:LoginUserDto){
+        try{
+            const {password,login, ...other} = loginUserDto;
+
+            const user = await this.userRepository.findUser(login)
+            if (!user || !(await bcrypt.compare(password, user.password))) {
+                throw new UnauthorizedException('Invalid credentials');
+            }
+            const userData:JwtPayloadDto = {id:user.id, login:user.login}
+
+            const accessToken = await this.jwtService.signAsync(userData,{
+                expiresIn:'15m'
+            })
+            const refreshToken = await this.jwtService.signAsync(userData,
+                {
+                    secret:process.env.JWT_REFRESH_SECRET_KEY,
+                    expiresIn:'10080m'
+                })
+            return {...userData, accessToken, refreshToken};
+        }catch(error:any){
+            throw error;
+        }
+    }
+
+    async refreshToken(user:User){
+        const userData:JwtPayloadDto = {id:user.id, login:user.login}
+
+        const accessToken = await this.jwtService.signAsync(userData,{
+            expiresIn:'15m'
+        })
+        const refreshToken = await this.jwtService.signAsync(userData,
+            {
+                secret:process.env.JWT_REFRESH_SECRET_KEY,
+                expiresIn:'10080m'
+            })
+
+        return {...userData, accessToken, refreshToken};
+    }
 }

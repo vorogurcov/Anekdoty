@@ -2,12 +2,13 @@ import {Injectable} from '@nestjs/common'
 import {Rubric} from '../interfaces/rubric.interface'
 import axios from "axios";
 import * as cheerio from 'cheerio'
-import {CreateAnekdotDto} from "../dto/CreateAnekdotDto";
-import {DbService} from '../db/db.service'
+import {CreateAnecdoteDto} from "../anecdote/dto/create-anecdote.dto";
+import {AnecdoteRepository} from "../anecdote/repositores/anecdote.repository";
 @Injectable()
-export class AnekdotScrapperService{
+export class AnecdoteScrapperService{
 
-    constructor(private readonly dbService: DbService) {}
+    constructor(
+        private anecdoteRepository:AnecdoteRepository) {}
 
     async getRubrics() {
         const url = "https://anekdoty.ru/";
@@ -29,8 +30,8 @@ export class AnekdotScrapperService{
         return rubrics;
     }
 
-    private async getAnekdotyByRubric(rubric: Rubric): Promise<CreateAnekdotDto[]> {
-        let anekdoty: CreateAnekdotDto[] = [];
+    private async getAnecdotesByRubric(rubric: Rubric): Promise<CreateAnecdoteDto[]> {
+        let anekdoty: CreateAnecdoteDto[] = [];
         let page = 1;
 
         while (true) {
@@ -57,7 +58,7 @@ export class AnekdotScrapperService{
                     anekdoty.push({
                         rubricName: rubric.name,
                         text: text,
-                        rating: rating
+                        rating: Number(rating)
                     });
 
                 }
@@ -86,10 +87,10 @@ export class AnekdotScrapperService{
         try{
             const rubrics = await this.getRubrics();
             for (const rubric of rubrics){
-                const anekdoty = await this.getAnekdotyByRubric(rubric);
+                const anekdoty = await this.getAnecdotesByRubric(rubric);
                 for (const anekdot of anekdoty) {
                     console.log(`Saving anekdot ${anekdot}`);
-                    await this.dbService.saveAnekdot(anekdot);
+                    await this.anecdoteRepository.saveAnecdote(anekdot);
                 }
                 console.log(`Done scrapping rubric: ${rubric}`);
             }
