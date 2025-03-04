@@ -6,7 +6,7 @@ const encodeFormData = (formData) => {
 
 export const submitLogin = async (formData) => {
     try {
-        const response = await fetch('http://localhost:3000/login/submit/', {
+        const response = await fetch('http://localhost:3000/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -28,7 +28,7 @@ export const submitLogin = async (formData) => {
 
 export const submitRegister = async (formData) => {
     try {
-        const response = await fetch('http://localhost:3000/register/submit/', {
+        const response = await fetch('http://localhost:3000/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -49,8 +49,8 @@ export const submitRegister = async (formData) => {
 
 export const refreshToken = async function(refreshToken){
     try {
-        console.log('Making request to http://localhost:3000/refresh')
-        const response = await fetch('http://localhost:3000/refresh', {
+        console.log('Making request to http://localhost:3000/auth/refresh')
+        const response = await fetch('http://localhost:3000/auth/refresh', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

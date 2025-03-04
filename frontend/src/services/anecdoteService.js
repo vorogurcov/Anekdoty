@@ -1,5 +1,6 @@
 import router from "@/router";
-import {refreshToken} from "@/services/authService";
+import { refreshToken } from "@/services/authService";
+
 export const searchUserAnecdotes = async ({ page, sort, order }) => {
     try {
         const token = localStorage.getItem('accessToken');
@@ -14,17 +15,14 @@ export const searchUserAnecdotes = async ({ page, sort, order }) => {
         url.searchParams.append('sort', sort);
         url.searchParams.append('order', order);
 
-        const formData = new URLSearchParams();
-        formData.append('accessToken', token);
-
         console.log(`Requesting: ${url.toString()}`);
 
         const response = await fetch(url.toString(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Bearer ${token}`,
             },
-            body: formData.toString(),
             credentials: 'include',
         });
 
@@ -33,7 +31,6 @@ export const searchUserAnecdotes = async ({ page, sort, order }) => {
             try {
                 const newAccessToken = await refreshToken();
                 localStorage.setItem('accessToken', newAccessToken);
-
                 return await searchUserAnecdotes({ page, sort, order });
             } catch (error) {
                 console.error("Error refreshing token:", error);
@@ -55,15 +52,16 @@ export const searchUserAnecdotes = async ({ page, sort, order }) => {
     }
 };
 
-export const getRubrics = async function(){
+export const getRubrics = async function () {
     try {
-
-        const url = 'http://localhost:3000/anekdotScrapper/rubrics'
-
+        const url = 'http://localhost:3000/anecdoteScrapper/rubrics';
         console.log(`Requesting: ${url}`);
 
-        const response = await fetch(url.toString(), {
+        const response = await fetch(url, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
         });
 
         if (!response.ok) {
@@ -77,15 +75,19 @@ export const getRubrics = async function(){
     }
 }
 
-export const anecdoteSearch = async function(anecdoteText){
-    try{
-        const url = `http://localhost:3000/searchAnecdote?anecdote_text=${anecdoteText}`
-        const data = await fetch(url,{
-            method:'POST',
-        }).then(response => response.json())
-        return data;
-    }catch(error){
-        console.log(error.message)
+export const anecdoteSearch = async function (anecdoteText) {
+    try {
+        const url = `http://localhost:3000/searchAnecdote?text=${anecdoteText}`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
@@ -99,18 +101,15 @@ export const addNewAnecdote = async function (anecdote) {
             return;
         }
 
-        const url = `http://localhost:3000/user/save/?anecdot_id=${anecdoteId}`;
-
-        const formData = new URLSearchParams();
-        formData.append('accessToken', accessToken);
-
+        const url = `http://localhost:3000/user/save/?anecdoteId=${anecdoteId}`;
         console.log(url);
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: formData.toString(),
+                'Authorization': `Bearer ${accessToken}`
+            }
         });
 
         if (response.status === 401) {
@@ -138,23 +137,23 @@ export const addNewAnecdote = async function (anecdote) {
 
         const result = await response.json();
         console.log(result);
-
     } catch (error) {
         console.log(error.message);
     }
 };
 
-export const fetchAllAnecdotes = async function(pageNumber) {
+export const fetchAllAnecdotes = async function (pageNumber) {
     try {
-
         const url = `http://localhost:3000/search?page=${pageNumber}&sort=text&order=DESC`;
         console.log(url);
+
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
             },
-            body: JSON.stringify({}),
+            body: JSON.stringify({})
         });
 
         if (!response.ok) {
@@ -162,10 +161,9 @@ export const fetchAllAnecdotes = async function(pageNumber) {
         }
 
         const data = await response.json();
-        return { anecdotes: data.data.anecdots, total: data.data.total };
-
+        return { anecdotes: data.data.anecdotes, total: data.data.total };
     } catch (error) {
         console.error("Error fetching anecdotes:", error);
         return [];
     }
-}
+};

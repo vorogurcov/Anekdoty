@@ -6,12 +6,16 @@ import {NestExpressApplication} from "@nestjs/platform-express";
 import {ValidationPipe} from "@nestjs/common";
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(new ValidationPipe({
+        transform: true,
+        whitelist: true,
+    }));
+
 
     const corsOptions = {
         origin: `http://${process.env.FRONTEND_HOST}:${process.env.FRONTEND_PORT}`,
         methods: "GET,POST,OPTIONS",
-        allowedHeaders: "Content-Type",
+        allowedHeaders: "Content-Type, Authorization",
         credentials:true,
     };
     app.enableCors(corsOptions);

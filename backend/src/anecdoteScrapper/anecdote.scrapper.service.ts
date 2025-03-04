@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common'
-import {Rubric} from '../interfaces/rubric.interface'
+import {Rubric} from './interfaces/rubric.interface'
 import axios from "axios";
 import * as cheerio from 'cheerio'
 import {CreateAnecdoteDto} from "../anecdote/dto/create-anecdote.dto";

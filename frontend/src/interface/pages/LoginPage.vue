@@ -74,7 +74,12 @@ export default {
     },
     async handleLogin(loginDto) {
       try {
-        this.accessToken = await submitLogin(loginDto).then((data) => data.accessToken);
+        const loginForm = {
+          login:loginDto.email,
+          password:loginDto.password,
+        }
+        this.accessToken = await submitLogin(loginForm)
+            .then((data) => data.accessToken);
         localStorage.setItem('accessToken', this.accessToken);
         this.$router.push('/main')
       } catch (error) {
