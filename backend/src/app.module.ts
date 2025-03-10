@@ -9,7 +9,7 @@ import {AnecdoteScrapperModule} from "./anecdoteScrapper/anecdote.scrapper.modul
 
 @Module({
   imports: [TypeOrmModule.forRoot({
-    host:process.env.DB_HOST ?? 'localhost',
+    host:process.env.DB_HOST,
     type:process.env.DB_PROVIDER as ('postgres' | 'mongodb'),
     port:Number(process.env.DB_PORT) ?? 5432,
     username:process.env.DB_USERNAME,

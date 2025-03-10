@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: 'postgres'
+    env_file:
+      - ./backend/docker.env
+    volumes:
+      - anecdote_db:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    environment:
+      DOCKER_ENV: true
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '8080:8080'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+volumes:
+  anecdote_db:

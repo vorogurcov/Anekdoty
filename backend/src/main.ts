@@ -1,4 +1,11 @@
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+
+const envFilePath = process.env.DOCKER_ENV? 'docker.env' :
+    'local.env';
+
+dotenv.config({ path: envFilePath });
+
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
